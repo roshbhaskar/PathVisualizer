@@ -13,7 +13,7 @@
   .node-start {
     background-color: green;
   }
-  /*
+  
   .node-visited {
     animation-name: visitedAnimation;
     animation-duration: 1.5s;
@@ -77,4 +77,4 @@
       transform: scale(1);
       background-color: rgb(255, 254, 106);
     }
-  }*/
+  }
