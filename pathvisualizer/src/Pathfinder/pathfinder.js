@@ -16,8 +16,14 @@ export default class Pathfinder extends Component {
         let col=0;
         for( row = 0;row <18;++row){
             const currentRow=[];
-            for(col=0; col<57 ; ++col){
-                    currentRow.push([]);
+            for(col=0; col<50 ; ++col){
+                const currentNode = {
+                    col,
+                    row,
+                    isStart: row===9 && col ===8,
+                    isFinish : row ===9 && col ===42,
+                };
+                    currentRow.push(currentNode);
             }
             nodes.push(currentRow);
             console.log(nodes);
@@ -29,9 +35,21 @@ export default class Pathfinder extends Component {
         return (
             <div className="grid">
                 {nodes.map((row,rowID)=>{
-                    return <>
-                    {row.map((node,nodeID) => <Node></Node>)}
-                    </>
+                    return (
+                    <div key={rowID}>
+                    {row.map((node,nodeID) => 
+                    {
+                        const {isStart,isFinish}=node;
+                        return (
+                        <Node 
+                        key = {nodeID} 
+                        isStart={isStart}
+                        isFinish={isFinish} 
+                        test = {'SaWdUde'}></Node>
+                        );
+                    })}
+                    </div>
+                );
                 })}
             </div>
         )
