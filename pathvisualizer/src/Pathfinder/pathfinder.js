@@ -5,9 +5,12 @@ import {dijkstra, getNodesInShortestPathOrder} from '../Algos/dijkstra.js';
 import './pathfinder.css';
 
 
-
-
-
+//NO SOLUTION CASE - done
+//CLEAR BOARD -done
+// MOVING START AND END POINTS 
+//NAV BAR
+//MORE ALGOS
+//CSS :d
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -18,14 +21,18 @@ export default class PathfindingVisualizer extends Component {
   constructor() {
     super();
     this.state = {
-      grid: [],
+      grid: [], // the whole box
       mouseIsPressed: false,
       endPoints:false,
       row_start:null,
       col_start:null,
       row_finish: null,
       col_finish: null,
+      visited_arr: [], // all the nodes traversed by the algo
+      shortest_path:[], //shortest path from start to end
+      maze:[], //holds all the walls for the maze
     };
+    
   }
 
   componentDidMount() {
@@ -34,25 +41,29 @@ export default class PathfindingVisualizer extends Component {
   }
 
   handleMouseDown(row, col) {
+    
     const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({grid: newGrid, mouseIsPressed: true});
+    const maze = [...this.state.maze,newGrid[1]]
+    this.setState({grid: newGrid[0], mouseIsPressed: true , maze:maze});
   }
 
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
     const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({grid: newGrid});
+    const maze = [...this.state.maze,newGrid[1]]
+    this.setState({grid: newGrid[0] , maze:maze});
   }
 
   handleMouseUp() {
     this.setState({mouseIsPressed: false});
   }
 
+  //ANIMATE ALL THE VISITED NODES OF THIS ALGO - CAN BE USED FOR ALL ALGOS
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
-          this.animateShortestPath(nodesInShortestPathOrder);
+          this.animateShortestPath(nodesInShortestPathOrder); //once you hit the last node i.e the finish node; animate the path
         }, 10 * i);
         return;
       }
@@ -64,6 +75,7 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
+  //ANIMATE THE SHORTEST PATH ONLY - CAN BE USED FOR ALL AGLOS
   animateShortestPath(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
@@ -74,6 +86,8 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
+  
+  //VISUALIZING DIJKSTRA
   visualizeDijkstra() {
     const {grid} = this.state;
     //const startNode = grid[this.state.row_start][this.state.col_start];
@@ -82,11 +96,29 @@ export default class PathfindingVisualizer extends Component {
     const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-    console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
+
+    if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
+    {
+      alert("NO SOLUTION");
+    }
+    else{
+      this.lockBoard();//locking the start and end while visualizing
+      this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+      console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
+      }
+
+   
+    this.setState({
+      visited_arr:visitedNodesInOrder,
+      shortest_path:nodesInShortestPathOrder,
+      
+    });
+    console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
+    
+
   }
 
-
+  //CREATING THE BOX
   getInitialGrid  ()  {
     const grid = [];
     for (let row = 0; row < 20; row++) {
@@ -99,6 +131,7 @@ export default class PathfindingVisualizer extends Component {
     return grid;
   };
 
+  //CREATE A NEW GRID/NODE
   createNode  (col, row)  {
     return {
       col,
@@ -112,6 +145,7 @@ export default class PathfindingVisualizer extends Component {
     };
   };
 
+  //TOGGLING THE WALL
   getNewGridWithWallToggled  (grid, row, col)  {
     const newGrid = grid.slice();
     const node = newGrid[row][col];
@@ -120,13 +154,54 @@ export default class PathfindingVisualizer extends Component {
       isWall: !node.isWall,
     };
     newGrid[row][col] = newNode;
+    return [newGrid,newNode];
+  };
+
+  //REMOVEING ALL THE WALLS FOOEVVAA
+  removeWalls  (grid, row, col)  {
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const newNode = {
+      ...node,
+      isWall: false,
+    };
+    newGrid[row][col] = newNode;
     return newGrid;
   };
 
-  
-  setStartNode() {
+  //LOCK BOARD WHILE VISUALIZING
+  lockBoard(){
 
   }
+
+  //CLEAR BOARD - REMOVES ALL THE WALLS AND THE VISITED AND THE SHORTEST
+  clearBoard() {
+
+    const {visited_arr,maze,grid}=this.state;
+    for(let j=0;j<maze.length;++j)
+    {
+      console.log("MAZE",maze[j]);
+      const newGrid = this.removeWalls(grid,maze[j].row,maze[j].col);
+      this.setState({grid: newGrid });
+    }
+    for (let i = 0; i <= visited_arr.length; i++) { // this is for the visited nodes or grids by the algo
+      if (i === visited_arr.length) {
+        console.log("SaWWdUDE");
+        //console.log("Maze",this.state.maze);
+        return;
+      }
+      setTimeout(() => {
+        const node = visited_arr[i];
+        //console.log("prob")
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-unvisit';
+      }, 1 * i); 
+    }
+
+    
+    
+
+}
 
   render() {
     const {grid, mouseIsPressed} = this.state;
@@ -140,6 +215,10 @@ export default class PathfindingVisualizer extends Component {
         <button onClick={() => this.setEndNode()}>
           Set end Node
         </button>
+        <button onClick={() => this.clearBoard()}>
+          Clear Board
+        </button>
+        
             <button onClick={() => this.visualizeDijkstra()}>
                 Visualize Dijkstra's Algorithm
                 </button> : <div></div>
