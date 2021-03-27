@@ -1,3 +1,50 @@
 Hello 
 Path Visualizer:
 Hi
+{col_finish  && row_finish ?
+                    <Node
+                      key={nodeIdx}
+                      col={col}
+                      isFinish={isFinish}
+                      isStart={isStart}
+                      isWall={isWall}
+                      mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      onMouseEnter={(row, col) =>
+                        this.handleMouseEnter(row, col)
+                      }
+                      onMouseUp={() => this.handleMouseUp()}
+                      row={row}></Node>
+                      :
+                      col_finish ?
+                      
+                      <Node
+                      key={nodeIdx}
+                      col={col}
+                      isFinish={true}
+                      isStart={null}
+                      //isWall={isWall}
+                      //mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.setStartNode(row, col)}
+                      onMouseEnter={(row, col) =>  this.none() }
+                      onMouseUp={() => this.none()}
+                      row={row}></Node>
+                      :
+                     
+                      <Node
+                      key={nodeIdx}
+                      col={col}
+                      isFinish={true}
+                      isStart={true}
+                      //isWall={isWall}
+                      //mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.setEndNode(row, col)}
+                      onMouseEnter={(row, col) =>  this.none() }
+                      onMouseUp={() => this.none()}
+                      row={row}></Node>
+                     
+                    }
+                      
+                    
+                      
+                    

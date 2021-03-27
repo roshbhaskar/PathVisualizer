@@ -12,10 +12,10 @@ import './pathfinder.css';
 //MORE ALGOS
 //CSS :d
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+const START_NODE_ROW = 0;
+const START_NODE_COL = 0;
+const FINISH_NODE_ROW = 1;
+const FINISH_NODE_COL = 2;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -90,13 +90,14 @@ export default class PathfindingVisualizer extends Component {
   //VISUALIZING DIJKSTRA
   visualizeDijkstra() {
     const {grid} = this.state;
+    console.log("from viz",grid);
     //const startNode = grid[this.state.row_start][this.state.col_start];
     //const finishNode =  grid[this.state.row_finish][this.state.col_finish];
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-
+    //console.log("viz");
     if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
     {
       alert("NO SOLUTION");
@@ -115,6 +116,7 @@ export default class PathfindingVisualizer extends Component {
     });
     console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
     
+   
 
   }
 
@@ -166,6 +168,7 @@ export default class PathfindingVisualizer extends Component {
       isWall: false,
     };
     newGrid[row][col] = newNode;
+    
     return newGrid;
   };
 
@@ -174,17 +177,20 @@ export default class PathfindingVisualizer extends Component {
 
   }
 
-  //CLEAR BOARD - REMOVES ALL THE WALLS AND THE VISITED AND THE SHORTEST
+  //CLEAR BOARD - REMOVES ALL THE WALLS AND THE VISITED AND THE SHORTEST BUT NOT WHILE EXECUTING
   clearBoard() {
 
-    const {visited_arr,maze,grid}=this.state;
+   /* const {visited_arr,maze,grid}=this.state;
     for(let j=0;j<maze.length;++j)
     {
       console.log("MAZE",maze[j]);
       const newGrid = this.removeWalls(grid,maze[j].row,maze[j].col);
       this.setState({grid: newGrid });
     }
+
+    console.log("from clear",this.state.grid)
     for (let i = 0; i <= visited_arr.length; i++) { // this is for the visited nodes or grids by the algo
+
       if (i === visited_arr.length) {
         console.log("SaWWdUDE");
         //console.log("Maze",this.state.maze);
@@ -193,15 +199,43 @@ export default class PathfindingVisualizer extends Component {
       setTimeout(() => {
         const node = visited_arr[i];
         //console.log("prob")
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-unvisit';
+        console.log(node);
+        if(node.row===0 && node.col ===0){
+        document.getElementById(`node-${0}-${0}`).className =
+          'node node-start';}
+        else if(node.row===1 && node.col===2){
+          document.getElementById(`node-${1}-${2}`).className =
+          'node node-finish';}
+        else{
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-unvisit';}
+        
+        
       }, 1 * i); 
+     
     }
-
     
     
+    this.setState({
+      visited_arr:[],
+      shortest_path:[],
+      
+    });
+    
+    */
+    window.location.reload();
+  }
 
-}
+
+  setStartNode(){
+
+  }
+  setEndNode(){
+
+  }
+  none(){
+
+  }
 
   render() {
     const {grid, mouseIsPressed} = this.state;
@@ -222,14 +256,17 @@ export default class PathfindingVisualizer extends Component {
             <button onClick={() => this.visualizeDijkstra()}>
                 Visualize Dijkstra's Algorithm
                 </button> : <div></div>
+
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
               <div key={rowIdx}>
                 {row.map((node, nodeIdx) => {
                   const {row, col, isFinish, isStart, isWall} = node;
+                  const {col_start,col_finish,row_start,row_finish} = this.state;
                   return (
-                    <Node
+                    <div className="BOX">
+                      <Node
                       key={nodeIdx}
                       col={col}
                       isFinish={isFinish}
@@ -239,9 +276,12 @@ export default class PathfindingVisualizer extends Component {
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                       onMouseEnter={(row, col) =>
                         this.handleMouseEnter(row, col)
+                      
                       }
                       onMouseUp={() => this.handleMouseUp()}
                       row={row}></Node>
+                    </div>
+                  
                   );
                 })}
               </div>

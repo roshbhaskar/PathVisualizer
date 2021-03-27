@@ -2,3 +2,7 @@
 .grid {
     margin: 100px 0 0;
   }
+
+.BOX{
+  display: inline-block;
+}

@@ -1,4 +1,5 @@
 export function dijkstra(grid, startNode, finishNode) {
+    console.log("grid from algo",grid);
     const visitedNodesInOrder = [];
     startNode.distance = 0;
     const unvisitedNodes = getAllNodes(grid);
@@ -6,7 +7,7 @@ export function dijkstra(grid, startNode, finishNode) {
       sortNodesByDistance(unvisitedNodes);
       const closestNode = unvisitedNodes.shift();
       // If we encounter a wall, we skip it.
-      if (closestNode.isWall) continue;
+      if (closestNode.isWall) {console.log("1"); continue;}
       // If the closest node is at a distance of infinity,
       // we must be trapped and should therefore stop.
       if (closestNode.distance === Infinity) return visitedNodesInOrder;

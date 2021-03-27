@@ -51,6 +51,9 @@
     background-color: rgb(12, 53, 71);
   }
   
+  .node-unvisit{
+    background-color:white;
+  }
   .node-shortest-path {
     animation-name: shortestPath;
     animation-duration: 1.5s;
