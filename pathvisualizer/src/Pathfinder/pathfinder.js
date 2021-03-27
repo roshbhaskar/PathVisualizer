@@ -6,7 +6,11 @@ import './pathfinder.css';
 
 
 //NO SOLUTION CASE - done
+    // - EDIT BOARD IF NO SOLUTION -done
 //CLEAR BOARD -done
+//LOCK BOARD -done
+//START FINISH CANT BE WALLED -done
+
 // MOVING START AND END POINTS 
 //NAV BAR
 //MORE ALGOS
@@ -46,16 +50,18 @@ export default class PathfindingVisualizer extends Component {
   handleMouseDown(row, col) {
     
     const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
+    if(newGrid){
     const maze = [...this.state.maze,newGrid[1]]
-    this.setState({grid: newGrid[0], mouseIsPressed: true , maze:maze});
+    this.setState({grid: newGrid[0], mouseIsPressed: true , maze:maze});}
   }
 
 
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
     const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
+    if(newGrid){
     const maze = [...this.state.maze,newGrid[1]]
-    this.setState({grid: newGrid[0] , maze:maze});
+    this.setState({grid: newGrid[0] , maze:maze});}
   }
 
 
@@ -163,6 +169,9 @@ export default class PathfindingVisualizer extends Component {
   getNewGridWithWallToggled  (grid, row, col)  {
     const newGrid = grid.slice();
     const node = newGrid[row][col];
+    if(node.isFinish || node.isStart){
+      return false;
+    }
     const newNode = {
       ...node,
       isWall: !node.isWall,
@@ -215,7 +224,7 @@ export default class PathfindingVisualizer extends Component {
           'node node-finish';}
         else{
           document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-unvisit';}
+          'node ';}
         
         
       }, 1 * i); 
