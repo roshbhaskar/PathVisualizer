@@ -28,6 +28,7 @@ export default class PathfindingVisualizer extends Component {
       col_start:null,
       row_finish: null,
       col_finish: null,
+      lock: false, // to lock the board while visualizing
       visited_arr: [], // all the nodes traversed by the algo
       shortest_path:[], //shortest path from start to end
       maze:[], //holds all the walls for the maze
@@ -38,8 +39,9 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     const grid = this.getInitialGrid();
     this.setState({grid});
-    this.setState({row_start:1});
+
   }
+
 
   handleMouseDown(row, col) {
     
@@ -48,6 +50,7 @@ export default class PathfindingVisualizer extends Component {
     this.setState({grid: newGrid[0], mouseIsPressed: true , maze:maze});
   }
 
+
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
     const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
@@ -55,10 +58,12 @@ export default class PathfindingVisualizer extends Component {
     this.setState({grid: newGrid[0] , maze:maze});
   }
 
+
   handleMouseUp() {
     this.setState({mouseIsPressed: false});
   }
 
+ 
   //ANIMATE ALL THE VISITED NODES OF THIS ALGO - CAN BE USED FOR ALL ALGOS
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
@@ -76,6 +81,7 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
+ 
   //ANIMATE THE SHORTEST PATH ONLY - CAN BE USED FOR ALL AGLOS
   animateShortestPath(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
@@ -90,37 +96,39 @@ export default class PathfindingVisualizer extends Component {
   
   //VISUALIZING DIJKSTRA
   visualizeDijkstra() {
+    this.setState({lock:true});//locking the start and end while visualizing
     const {grid} = this.state;
-    console.log("from viz",grid);
+    //console.log("from viz",grid);
     //const startNode = grid[this.state.row_start][this.state.col_start];
     //const finishNode =  grid[this.state.row_finish][this.state.col_finish];
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    console.log("VISITED",visitedNodesInOrder);
+    //console.log("VISITED",visitedNodesInOrder);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    console.log("SHORTEST",nodesInShortestPathOrder);
+    //console.log("SHORTEST",nodesInShortestPathOrder);
     if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
     {
-      alert("NO SOLUTION");
+      alert("NO SOLUTION Edit the board");
+      this.setState({lock:false});//unlock it if there is no solution
     }
     else{
-      this.lockBoard();//locking the start and end while visualizing
+     
       this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
       console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
-      }
-
-   
-    this.setState({
-      visited_arr:visitedNodesInOrder,
-      shortest_path:nodesInShortestPathOrder,
       
-    });
-    console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
-    
-   
 
+     // this.setState({lock:false});
+      this.setState({
+        visited_arr:visitedNodesInOrder,
+        shortest_path:nodesInShortestPathOrder,
+        });
+  
+    }
+
+    //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
   }
+
 
   //CREATING THE BOX
   getInitialGrid  ()  {
@@ -134,6 +142,7 @@ export default class PathfindingVisualizer extends Component {
     }
     return grid;
   };
+
 
   //CREATE A NEW GRID/NODE
   createNode  (col, row)  {
@@ -149,6 +158,7 @@ export default class PathfindingVisualizer extends Component {
     };
   };
 
+
   //TOGGLING THE WALL
   getNewGridWithWallToggled  (grid, row, col)  {
     const newGrid = grid.slice();
@@ -161,8 +171,9 @@ export default class PathfindingVisualizer extends Component {
     return [newGrid,newNode];
   };
 
+
   //REMOVEING ALL THE WALLS FOOEVVAA
-  removeWalls  (grid, row, col)  {
+  /*removeWalls  (grid, row, col)  {
     const newGrid = grid.slice();
     const node = newGrid[row][col];
     const newNode = {
@@ -172,22 +183,20 @@ export default class PathfindingVisualizer extends Component {
     newGrid[row][col] = newNode;
     
     return newGrid;
-  };
+  };*/
 
-  //LOCK BOARD WHILE VISUALIZING
-  lockBoard(){
-
-  }
+ 
 
   //CLEAR BOARD - REMOVES ALL THE WALLS AND THE VISITED AND THE SHORTEST BUT NOT WHILE EXECUTING
   clearBoard() {
     
+    this.setState({lock:false}); //unlock the board now for new paths
     const {visited_arr,maze,grid}=this.state;
     
-    const grid_ = this.getInitialGrid();
+    const grid_ = this.getInitialGrid(); //get a new box
     this.setState({grid:grid_});
 
-    for (let i = 0; i <= visited_arr.length; i++) { // this is for the visited nodes or grids by the algo
+    for (let i = 0; i <= visited_arr.length; i++) { // get rid of the animations
 
       if (i === visited_arr.length) {
         console.log("SaWWdUDE");
@@ -221,9 +230,8 @@ export default class PathfindingVisualizer extends Component {
   setEndNode(){
 
   }
-  none(){
+  
 
-  }
 
   render() {
     const {grid, mouseIsPressed} = this.state;
@@ -267,7 +275,8 @@ export default class PathfindingVisualizer extends Component {
                       
                       }
                       onMouseUp={() => this.handleMouseUp()}
-                      row={row}></Node>
+                      row={row}
+                      lock={this.state.lock}></Node>
                     </div>
                   
                   );
