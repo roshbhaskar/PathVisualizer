@@ -38,6 +38,7 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     const grid = this.getInitialGrid();
     this.setState({grid});
+    this.setState({row_start:1});
   }
 
   handleMouseDown(row, col) {
@@ -96,8 +97,9 @@ export default class PathfindingVisualizer extends Component {
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    console.log("VISITED",visitedNodesInOrder);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    //console.log("viz");
+    console.log("SHORTEST",nodesInShortestPathOrder);
     if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
     {
       alert("NO SOLUTION");
@@ -179,16 +181,12 @@ export default class PathfindingVisualizer extends Component {
 
   //CLEAR BOARD - REMOVES ALL THE WALLS AND THE VISITED AND THE SHORTEST BUT NOT WHILE EXECUTING
   clearBoard() {
+    
+    const {visited_arr,maze,grid}=this.state;
+    
+    const grid_ = this.getInitialGrid();
+    this.setState({grid:grid_});
 
-   /* const {visited_arr,maze,grid}=this.state;
-    for(let j=0;j<maze.length;++j)
-    {
-      console.log("MAZE",maze[j]);
-      const newGrid = this.removeWalls(grid,maze[j].row,maze[j].col);
-      this.setState({grid: newGrid });
-    }
-
-    console.log("from clear",this.state.grid)
     for (let i = 0; i <= visited_arr.length; i++) { // this is for the visited nodes or grids by the algo
 
       if (i === visited_arr.length) {
@@ -214,16 +212,6 @@ export default class PathfindingVisualizer extends Component {
       }, 1 * i); 
      
     }
-    
-    
-    this.setState({
-      visited_arr:[],
-      shortest_path:[],
-      
-    });
-    
-    */
-    window.location.reload();
   }
 
 
