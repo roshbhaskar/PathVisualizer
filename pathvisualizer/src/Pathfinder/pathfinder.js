@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import Node from './node/node.js';
 import {dijkstra, getNodesInShortestPathOrder} from '../Algos/dijkstra.js';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
+
+//import * as ReactBootstrap from 'react-bootstrap';
 
 //import {DragDropContext,Droppable,Draggable} from 'react-beautiful-dnd';
 import './pathfinder.css';
@@ -11,8 +15,8 @@ import './pathfinder.css';
 //CLEAR BOARD -done
 //LOCK BOARD -done
 //START FINISH CANT BE WALLED -done
-
 // MOVING START AND END POINTS - done
+
 //NAV BAR
 //MORE ALGOS
 //CSS :d
@@ -356,22 +360,28 @@ export default class PathfindingVisualizer extends Component {
 
     return (
       <>
-       <div className="header">
-        <button onClick={() => this.setStartNode()}>
-          {this.state.changing_start ? "Save" : "Change Start" }
-        </button> 
-        
-        <button onClick={() => this.setEndNode()}>
-         {this.state.changing_finish ? "Save" :" Change End"}
-        </button>
-        <button onClick={() => this.clearBoard()}>
-          Clear Board
-        </button>
-        
-            <button onClick={() => this.visualizeDijkstra()}>
-                Visualize Dijkstra's Algorithm
-                </button> : <div></div>
-      </div>
+      <div className="header">
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Algorithms
+                  </Dropdown.Toggle>
+
+                <Dropdown.Menu >
+                  <Dropdown.Item onClick={() => this.visualizeDijkstra()}>Dijkstra</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">A Star</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Depth First</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Button onClick={() => this.setStartNode()}>
+                {this.state.changing_start ? "Save" : "Change Start" }
+                </Button>
+                <Button onClick={() => this.setEndNode()}>
+                {this.state.changing_finish ? "Save" : "Change End" }
+                </Button>
+                <Button onClick={() => this.clearBoard()}>
+                  Clear
+                </Button>
+        </div>
 
         <div className="grid" >
           {grid.map((row, rowIdx) => {
