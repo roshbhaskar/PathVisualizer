@@ -308,8 +308,16 @@ export default class PathfindingVisualizer extends Component {
           document.getElementById(`node-${1}-${2}`).className =
           'node node-finish';}
         */
-        if(node.isFinish || node.isStart)
-        { console.log("SAVE");}
+        if(node.isFinish )
+        { 
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-finish';
+        }
+        else if (node.isStart)
+        {
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-start';
+        }
         else{
           document.getElementById(`node-${node.row}-${node.col}`).className =
           'node ';}
