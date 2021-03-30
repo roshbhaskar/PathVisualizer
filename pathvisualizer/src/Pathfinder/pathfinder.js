@@ -224,6 +224,10 @@ export default class PathfindingVisualizer extends Component {
 
     if(this.state.changing_start){
       const newGrid = this.state.grid.slice();
+      const node = newGrid[row][col];
+
+      if(node.isWall) return; // gaurd so that the new start node is not placed on the exisiting wall
+
       const old_node = newGrid[this.state.row_start][this.state.row_finish];
       const temp = {
         ...old_node,
@@ -235,7 +239,7 @@ export default class PathfindingVisualizer extends Component {
       document.getElementById(`node-${row}-${col}`).className =
       'node node-start';
       //const newGrid = this.state.grid.slice();
-      const node = newGrid[row][col];
+     
       const newNode = {
         ...node,
         isStart: true,
@@ -252,7 +256,12 @@ export default class PathfindingVisualizer extends Component {
   
   shiftEndNode(row,col){
     if(this.state.changing_finish){
+      
       const newGrid = this.state.grid.slice();
+      const node = newGrid[row][col];
+
+      if(node.isWall) return; //gaurd - you're not allowed to set the finish node on an exixting wall
+      
       const old_node = newGrid[this.state.col_start][this.state.col_finish];
       const temp = {
         ...old_node,
@@ -264,7 +273,7 @@ export default class PathfindingVisualizer extends Component {
       document.getElementById(`node-${row}-${col}`).className =
       'node node-finish';
       //const newGrid = this.state.grid.slice();
-      const node = newGrid[row][col];
+      
       const newNode = {
         ...node,
         isFinish: true,
@@ -347,7 +356,7 @@ export default class PathfindingVisualizer extends Component {
 
     return (
       <>
-       
+       <div className="header">
         <button onClick={() => this.setStartNode()}>
           {this.state.changing_start ? "Save" : "Change Start" }
         </button> 
@@ -362,7 +371,8 @@ export default class PathfindingVisualizer extends Component {
             <button onClick={() => this.visualizeDijkstra()}>
                 Visualize Dijkstra's Algorithm
                 </button> : <div></div>
-       
+      </div>
+
         <div className="grid" >
           {grid.map((row, rowIdx) => {
             return (
@@ -408,7 +418,7 @@ export default class PathfindingVisualizer extends Component {
             );
           })}
         </div>
-         )
+         
        
       </>
     );
