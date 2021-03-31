@@ -14,11 +14,6 @@
   display: inline;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: rgb(83, 83, 83);
-  border-color: rgb(83, 83, 83);
-}
 
 .btn-success {
   margin: 5px;
@@ -38,6 +33,9 @@
 }
 
 .btn-primary{
+  color: #fff;
+  background-color: rgb(83, 83, 83);
+  border-color: rgb(83, 83, 83);
   margin: 5px;
   position: relative;
   width: 120px;

@@ -16,8 +16,8 @@ import './pathfinder.css';
 //LOCK BOARD -done
 //START FINISH CANT BE WALLED -done
 // MOVING START AND END POINTS - done
+//NAV BAR -done
 
-//NAV BAR
 //MORE ALGOS
 //CSS :d
 
@@ -33,10 +33,10 @@ export default class PathfindingVisualizer extends Component {
       grid: [], // the whole box
       mouseIsPressed: false,
       endPoints:false,
-      row_start:4,
-      col_start:2,
-      row_finish: 4,
-      col_finish: 2,
+      row_start:10,
+      col_start:10,
+      row_finish: 10,
+      col_finish: 38,
       changing_start : false,
       changing_finish : false,
       lock: false, // to lock the board while visualizing
@@ -230,7 +230,7 @@ export default class PathfindingVisualizer extends Component {
       const newGrid = this.state.grid.slice();
       const node = newGrid[row][col];
 
-      if(node.isWall) return; // gaurd so that the new start node is not placed on the exisiting wall
+      if(node.isWall  || node.isFinish ) return; // gaurd so that the new start node is not placed on the exisiting wall
 
       const old_node = newGrid[this.state.row_start][this.state.row_finish];
       const temp = {
@@ -264,7 +264,7 @@ export default class PathfindingVisualizer extends Component {
       const newGrid = this.state.grid.slice();
       const node = newGrid[row][col];
 
-      if(node.isWall) return; //gaurd - you're not allowed to set the finish node on an exixting wall
+      if(node.isWall || node.isStart) return; //gaurd - you're not allowed to set the finish node on an exixting wall
       
       const old_node = newGrid[this.state.col_start][this.state.col_finish];
       const temp = {
