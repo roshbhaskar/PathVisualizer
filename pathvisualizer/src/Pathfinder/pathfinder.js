@@ -3,6 +3,7 @@ import Node from './node/node.js';
 import {dijkstra, getNodesInShortestPathOrder} from '../Algos/dijkstra.js';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import astar from '../Algos/astar';
 
 //import * as ReactBootstrap from 'react-bootstrap';
 
@@ -145,6 +146,15 @@ export default class PathfindingVisualizer extends Component {
     //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
   }
 
+  visualizeAStar() {
+    this.setState({lock:true});//locking the start and end while visualizing
+    const {grid} = this.state;
+    //console.log("from viz",grid);
+    const startNode = grid[this.state.row_start][this.state.row_finish];
+    const finishNode =  grid[this.state.col_start][this.state.col_finish];
+    const paths = astar(grid,startNode,finishNode);
+    //this.animateDijkstra(paths[0],paths[1]);
+  }
 
   //CREATING THE BOX
   getInitialGrid  ()  {
@@ -368,7 +378,7 @@ export default class PathfindingVisualizer extends Component {
 
                 <Dropdown.Menu >
                   <Dropdown.Item onClick={() => this.visualizeDijkstra()}>Dijkstra</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">A Star</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.visualizeAStar()}>A Star</Dropdown.Item>
                   <Dropdown.Item href="#/action-3">Depth First</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
