@@ -9,4 +9,7 @@ This web app visualizes the paths traversed by different path finding algorithms
 
 ### Algorithms 
 - Dijkstra
-- 
+
+
+### Reference 
+[Clément Mihailescu](https://www.youtube.com/watch?v=msttfIHHkak)
