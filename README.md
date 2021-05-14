@@ -13,3 +13,6 @@ This web app visualizes the paths traversed by different path finding algorithms
 - Start and End nodes can be changed 
 - Walls can be built on the grid which blocks the paths from the start to end
 
+
+### Reference 
+[Clément Mihailescu](https://www.youtube.com/watch?v=msttfIHHkak)
