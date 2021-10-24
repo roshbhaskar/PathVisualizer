@@ -4,6 +4,8 @@ This web app visualizes the paths traversed by different path finding algorithms
 ### Algorithms 
 - Depth First Search
 - Breath First Search
+- A Star Search
+- Greedy Search
 
 
 ### Key Points
