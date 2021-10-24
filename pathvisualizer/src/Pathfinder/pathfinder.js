@@ -48,6 +48,7 @@ export default class PathfindingVisualizer extends Component {
       visited_arr: [], // all the nodes traversed by the algo
       shortest_path:[], //shortest path from start to end
       maze:[], //holds all the walls for the maze
+      distance : 0
     };
     
   }
@@ -137,12 +138,14 @@ export default class PathfindingVisualizer extends Component {
      
       this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
       console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
-      
+      var lastObj = nodesInShortestPathOrder.length-1
+      //console.log("Last Obj",lastObj[0].totalDistance);
 
      // this.setState({lock:false});
       this.setState({
         visited_arr:visitedNodesInOrder,
         shortest_path:nodesInShortestPathOrder,
+        distance: lastObj
         });
   
     }
@@ -172,14 +175,15 @@ export default class PathfindingVisualizer extends Component {
      
       this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
       //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
-      
+      var lastObj = nodesInShortestPathOrder.length -1
+      //console.log("Last Obj",lastObj[0].totalDistance);
 
      // this.setState({lock:false});
       this.setState({
         visited_arr:visitedNodesInOrder,
         shortest_path:nodesInShortestPathOrder,
+        distance: lastObj
         });
-  
     }
 
     //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
@@ -207,12 +211,14 @@ export default class PathfindingVisualizer extends Component {
      
       this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
       //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
-      
+      var lastObj = nodesInShortestPathOrder.length-1
+      //console.log(nodesInShortestPathOrder,lastObj,"Last Obj",lastObj[0].totalDistance);
 
      // this.setState({lock:false});
       this.setState({
         visited_arr:visitedNodesInOrder,
         shortest_path:nodesInShortestPathOrder,
+        distance: lastObj
         });
   
     }
@@ -241,13 +247,15 @@ export default class PathfindingVisualizer extends Component {
     else{
      
       this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-      //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
-      
+      //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder);
+      var lastObj = nodesInShortestPathOrder.length -1
+      //console.log("Last Obj",lastObj[0].totalDistance);
 
      // this.setState({lock:false});
       this.setState({
         visited_arr:visitedNodesInOrder,
         shortest_path:nodesInShortestPathOrder,
+        distance: lastObj
         });
   
     }
@@ -410,7 +418,7 @@ export default class PathfindingVisualizer extends Component {
     const {visited_arr,maze,grid}=this.state;
     
     const grid_ = this.getGrid(); //get a new box
-    this.setState({grid:grid_});
+    this.setState({grid:grid_,distance:0});
 
     for (let i = 0; i <= visited_arr.length; i++) { // get rid of the animations
 
@@ -461,7 +469,7 @@ export default class PathfindingVisualizer extends Component {
 
   clearPath() {
     
-    this.setState({lock:false}); //unlock the board now for new paths
+    this.setState({lock:false,distance:0}); //unlock the board now for new paths
     const {visited_arr,maze,grid}=this.state;
     
     // const grid_ = this.getGrid(); //get a new box
@@ -559,9 +567,9 @@ export default class PathfindingVisualizer extends Component {
                 <Button onClick={() => this.clearBoard()}>
                   Clear Board
                 </Button>
-        </div>
-
+        </div>     
         <div className="grid" >
+        <h4>Total Distance : {this.state.distance}</h4>
           {grid.map((row, rowIdx) => {
             return (
               <div key={rowIdx}>
