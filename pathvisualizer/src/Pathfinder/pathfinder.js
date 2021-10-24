@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import Node from './node/node.js';
-import {dijkstra, getNodesInShortestPathOrder} from '../Algos/dijkstra.js';
+// import {dijkstra, getNodesInShortestPathOrder} from '../Algos/dijkstra.js';
+import { DFS,getNodesInShortestPathOrderDFS } from '../Algos/dfs.js';
+import { astar,getNodesInShortestPathOrderAstar } from '../Algos/astar';
+import { greedyBFS,getNodesInShortestPathOrderGreedyBFS } from '../Algos/greedy.js';
+import { BFS,getNodesInShortestPathOrderBFS } from '../Algos/bfs.js';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import astar from '../Algos/astar';
+
 
 //import * as ReactBootstrap from 'react-bootstrap';
 
@@ -119,14 +123,14 @@ export default class PathfindingVisualizer extends Component {
     const finishNode =  grid[this.state.col_start][this.state.col_finish];
     //const startNode = grid[START_NODE_ROW][START_NODE_COL];
     //const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
-    console.log("VISITED",startNode,finishNode);
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    console.log("VISITED",visitedNodesInOrder);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    //console.log("VISITED",startNode,finishNode);
+    const visitedNodesInOrder = BFS(grid, startNode, finishNode);
+    //console.log("VISITED",visitedNodesInOrder);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrderBFS(finishNode);
     //console.log("SHORTEST",nodesInShortestPathOrder);
     if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
     {
-      alert("NO SOLUTION Edit the board");
+      alert("No solution ! Please edit the board");
       this.setState({lock:false});//unlock it if there is no solution
     }
     else{
@@ -146,14 +150,109 @@ export default class PathfindingVisualizer extends Component {
     //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
   }
 
-  visualizeAStar() {
+  visualizeDFS() {
     this.setState({lock:true});//locking the start and end while visualizing
     const {grid} = this.state;
     //console.log("from viz",grid);
     const startNode = grid[this.state.row_start][this.state.row_finish];
     const finishNode =  grid[this.state.col_start][this.state.col_finish];
-    const paths = astar(grid,startNode,finishNode);
-    //this.animateDijkstra(paths[0],paths[1]);
+    //const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    //const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
+    //console.log("VISITED",startNode,finishNode);
+    const visitedNodesInOrder = DFS(grid, startNode, finishNode);
+    //console.log("VISITED",visitedNodesInOrder);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrderDFS(finishNode);
+    //console.log("SHORTEST",nodesInShortestPathOrder);
+    if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
+    {
+      alert("No solution ! Please edit the board");
+      this.setState({lock:false});//unlock it if there is no solution
+    }
+    else{
+     
+      this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+      //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
+      
+
+     // this.setState({lock:false});
+      this.setState({
+        visited_arr:visitedNodesInOrder,
+        shortest_path:nodesInShortestPathOrder,
+        });
+  
+    }
+
+    //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
+  }
+
+  visualizeGreedy() {
+    this.setState({lock:true});//locking the start and end while visualizing
+    const {grid} = this.state;
+    //console.log("from viz",grid);
+    const startNode = grid[this.state.row_start][this.state.row_finish];
+    const finishNode =  grid[this.state.col_start][this.state.col_finish];
+    //const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    //const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
+    //console.log("VISITED",startNode,finishNode);
+    const visitedNodesInOrder = greedyBFS(grid, startNode, finishNode);
+    //console.log("VISITED",visitedNodesInOrder);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrderGreedyBFS(finishNode);
+    //console.log("SHORTEST",nodesInShortestPathOrder);
+    if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
+    {
+      alert("No solution ! Please edit the board");
+      this.setState({lock:false});//unlock it if there is no solution
+    }
+    else{
+     
+      this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+      //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
+      
+
+     // this.setState({lock:false});
+      this.setState({
+        visited_arr:visitedNodesInOrder,
+        shortest_path:nodesInShortestPathOrder,
+        });
+  
+    }
+
+    //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
+  }
+
+  visualizeAstar() {
+    this.setState({lock:true});//locking the start and end while visualizing
+    const {grid} = this.state;
+    //console.log("from viz",grid);
+    const startNode = grid[this.state.row_start][this.state.row_finish];
+    const finishNode =  grid[this.state.col_start][this.state.col_finish];
+    //const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    //const finishNode =  grid[ FINISH_NODE_ROW][ FINISH_NODE_COL];
+    //console.log("VISITED",startNode,finishNode);
+    const visitedNodesInOrder = astar(grid, startNode, finishNode);
+    //console.log("VISITED",visitedNodesInOrder);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrderAstar(finishNode);
+    //console.log("SHORTEST",nodesInShortestPathOrder);
+    if(finishNode.col===nodesInShortestPathOrder[0].col && finishNode.row===nodesInShortestPathOrder[0].row)
+    {
+      alert("No solution ! Please edit the board");
+      this.setState({lock:false});//unlock it if there is no solution
+    }
+    else{
+     
+      this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+      //console.log("finish",finishNode,"shortest",nodesInShortestPathOrder,visitedNodesInOrder);
+      
+
+     // this.setState({lock:false});
+      this.setState({
+        visited_arr:visitedNodesInOrder,
+        shortest_path:nodesInShortestPathOrder,
+        });
+  
+    }
+
+    //console.log(this.state.shortest_path,"hi",nodesInShortestPathOrder);
   }
 
   //CREATING THE BOX
@@ -331,6 +430,7 @@ export default class PathfindingVisualizer extends Component {
           document.getElementById(`node-${1}-${2}`).className =
           'node node-finish';}
         */
+       
         if(node.isFinish )
         { 
           document.getElementById(`node-${node.row}-${node.col}`).className =
@@ -342,8 +442,71 @@ export default class PathfindingVisualizer extends Component {
           'node node-start';
         }
         else{
+          
+            document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node ';
+          const newNode = {
+            ...node,
+            isVisited: !node.isVisited,
+          };
+          grid[node.row][node.col] = newNode;
+         
+          }
+        
+        
+      }, 1 * i); 
+     
+    }
+  }
+
+  clearPath() {
+    
+    this.setState({lock:false}); //unlock the board now for new paths
+    const {visited_arr,maze,grid}=this.state;
+    
+    // const grid_ = this.getGrid(); //get a new box
+    // this.setState({grid:grid_});
+
+    for (let i = 0; i <= visited_arr.length; i++) { // get rid of the animations
+
+      if (i === visited_arr.length) {
+        console.log("SaWWdUDE");
+        //console.log("Maze",this.state.maze);
+        return;
+      }
+      setTimeout(() => {
+        const node = visited_arr[i];
+        //console.log("prob")
+        console.log(node);
+        /*if(node.row===0 && node.col ===0){
+        document.getElementById(`node-${0}-${0}`).className =
+          'node node-start';}
+        else if(node.row===1 && node.col===2){
+          document.getElementById(`node-${1}-${2}`).className =
+          'node node-finish';}
+        */
+       
+        if(node.isFinish )
+        { 
           document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node ';}
+          'node node-finish';
+        }
+        else if (node.isStart)
+        {
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-start';
+        }
+        else{
+          
+            document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node ';
+          const newNode = {
+            ...node,
+            isVisited: !node.isVisited,
+          };
+          grid[node.row][node.col] = newNode;
+         
+          }
         
         
       }, 1 * i); 
@@ -377,9 +540,11 @@ export default class PathfindingVisualizer extends Component {
                   </Dropdown.Toggle>
 
                 <Dropdown.Menu >
-                  <Dropdown.Item onClick={() => this.visualizeDijkstra()}>Dijkstra</Dropdown.Item>
-                  <Dropdown.Item onClick={() => this.visualizeAStar()}>A Star</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Depth First</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.visualizeDijkstra()}>BFS</Dropdown.Item>
+                  {/* <Dropdown.Item onClick={() => this.visualizeAStar()}>A Star</Dropdown.Item> */}
+                  <Dropdown.Item onClick={() => this.visualizeDFS()}>DFS</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.visualizeAstar()}>Astar</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.visualizeGreedy()}>Greedy</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Button onClick={() => this.setStartNode()}>
@@ -388,8 +553,11 @@ export default class PathfindingVisualizer extends Component {
                 <Button onClick={() => this.setEndNode()}>
                 {this.state.changing_finish ? "Save" : "Change End" }
                 </Button>
+                <Button onClick={() => this.clearPath()}>
+                  Clear Path
+                </Button>
                 <Button onClick={() => this.clearBoard()}>
-                  Clear
+                  Clear Board
                 </Button>
         </div>
 
