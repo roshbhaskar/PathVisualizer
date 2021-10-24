@@ -8,8 +8,9 @@ export function DFS(grid, startNode, finishNode) {
     while (unvisitedNodes.length !== 0) {
       let closestNode = unvisitedNodes.shift();
       if (closestNode.isWall) continue;
-      if (closestNode === finishNode) return visitedNodesInOrder;
       visitedNodesInOrder.push(closestNode);
+      if (closestNode === finishNode) return visitedNodesInOrder;
+      
       closestNode.isVisited = true;
       let unvisitedNeighbours = getUnvisitedNeighbours(closestNode, grid);
       for (let unvisitedNeighbour of unvisitedNeighbours) {
